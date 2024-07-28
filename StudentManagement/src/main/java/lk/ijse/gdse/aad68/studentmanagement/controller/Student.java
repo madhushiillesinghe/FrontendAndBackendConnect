@@ -2,6 +2,7 @@ package lk.ijse.gdse.aad68.studentmanagement.controller;
 
 
 import lk.ijse.gdse.aad68.studentmanagement.Util.util;
+import lk.ijse.gdse.aad68.studentmanagement.bo.StudentBOIMPL;
 import lk.ijse.gdse.aad68.studentmanagement.dao.StudentDaoIMPL;
 import lk.ijse.gdse.aad68.studentmanagement.dto.StudentDTO;
 import jakarta.json.bind.Jsonb;
@@ -29,12 +30,11 @@ public class Student extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try(var writer = resp.getWriter()) {
-            var studentDAOIMPL = new StudentDaoIMPL();
-            Jsonb jsonb = JsonbBuilder.create();
+            var studentBOIMPL = new StudentBOIMPL();            Jsonb jsonb = JsonbBuilder.create();
             //DB Process
             var studentId = req.getParameter("studentId");;
             resp.setContentType("application/json");
-            jsonb.toJson(studentDAOIMPL.getStudent(studentId,connection),writer);
+            jsonb.toJson(studentBOIMPL.getStudent(studentId,connection),writer);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -48,11 +48,10 @@ public class Student extends HttpServlet {
         }
         try (var writer = resp.getWriter()){
             Jsonb jsonb = JsonbBuilder.create();
-            var studentDAOIMPL = new StudentDaoIMPL();
-            StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
+            var studentBOIMPL = new StudentBOIMPL();            StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
             student.setID(util.idGenerate());
             //Save data in the DB
-            writer.write(studentDAOIMPL.saveStudent(student,connection));
+            writer.write(studentBOIMPL.saveStudent(student,connection));
             resp.setStatus(HttpServletResponse.SC_CREATED);
         }catch (Exception e){
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -65,8 +64,8 @@ public class Student extends HttpServlet {
         //Todo: Delete Student
         try (var writer = resp.getWriter()) {
             var studentId = req.getParameter("studentId");
-            var studentDaoIMPL = new StudentDaoIMPL();
-            if(studentDaoIMPL.deleteStudent(studentId,connection)){
+            var studentBOIMPL = new StudentBOIMPL();
+            if(studentBOIMPL.deleteStudent(studentId,connection)){
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             }else {
                 writer.write("Delete failed");
@@ -84,11 +83,10 @@ public class Student extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //Todo: Update Student
         try (var writer = resp.getWriter()) {
-            var studentDAOIMPL = new StudentDaoIMPL();
-            var studentId = req.getParameter("studentId");
+            var studentBOIMPL = new StudentBOIMPL();            var studentId = req.getParameter("studentId");
             Jsonb jsonb = JsonbBuilder.create();
             StudentDTO student = jsonb.fromJson(req.getReader(), StudentDTO.class);
-            if(studentDAOIMPL.updateStudent(studentId,student,connection)){
+            if(studentBOIMPL.updateStudent(studentId,student,connection)){
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
             }else {
                 writer.write("Update failed");
