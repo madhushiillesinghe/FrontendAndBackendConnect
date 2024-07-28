@@ -49,7 +49,7 @@
         const id = document.getElementById('id').value;
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
-        const city=document.getElementById('city').value;
+        const city = document.getElementById('city').value;
         const level = document.getElementById('level').value;
 
         // Print the data to the console
@@ -62,24 +62,24 @@
         const cell2 = newRow.insertCell(1);
         const cell3 = newRow.insertCell(2);
         const cell4 = newRow.insertCell(3);
-        const cell5=newRow.insertCell(4)
+        const cell5 = newRow.insertCell(4)
 
 
         cell1.textContent = id;
         cell2.textContent = name;
         cell3.textContent = email;
-        cell4.textContent=city
+        cell4.textContent = city
         cell5.textContent = level;
 
         // Reset the form
         document.getElementById('studentForm').reset();
 
         // create object
-        const studentData ={
-            name:name,
-            email:email,
-            city:city,
-            level:level
+        const studentData = {
+            name: name,
+            email: email,
+            city: city,
+            level: level
         }
         console.log(studentData)
 
@@ -97,25 +97,38 @@
         //05.send object
 
         const http = new XMLHttpRequest()
-        http.onreadystatechange = ()=>{
-            if (http.readyState ==4){
-                if (http.status==200){
+        http.onreadystatechange = () => {
+            if (http.readyState == 4) {
+                if (http.status == 200) {
                     var responseTextJSON = JSON.stringify(http.responseText)
                     console.log(responseTextJSON);
-                }else {
+                } else {
                     console.error("Failed");
                     console.error("Status" + http.status);
-                    console.error("Ready State"+http.readyState);
+                    console.error("Ready State" + http.readyState);
                 }
-            }else {
+            } else {
 
-                console.error("Ready State"+http.readyState);
+                console.error("Ready State" + http.readyState);
             }
         }
-        http.open("POST","http://localhost:8080/StudentManagementPortion/student",true)
-        http.setRequestHeader("Content-Type","application/json")
+        http.open("POST", "http://localhost:8080/StudentManagementPortion/student", true)
+        http.setRequestHeader("Content-Type", "application/json")
         http.send(studentJSON)
     }
+    //     $.ajax({
+    //         url:"http://localhost:8080/StudentManagementPortion/student",
+    //         type:POST,
+    //         data:studentJSON,
+    //         header:{"content-Types":"application/json"},
+    //         success:(res)=> {
+    //             console.log(JSON.stringify(res));
+    //         },
+    //         error: (res) => {
+    //         console.error(res)
+    //     }
+    // });
+    // }
 </script>
 
 </body>
